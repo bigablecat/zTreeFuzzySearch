@@ -1,3 +1,4 @@
+<!-- fuzzysearch.html -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,9 +26,13 @@ span.search_highlight {
 	background-color: darkred; 	
 }
 </style>
+<!-- 定义了一些模拟数据的js文件dataset.js -->
 <script type="text/javascript" src="js/dataset.js"></script>
+<!-- 引入jquery  -->
 <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+<!-- 引入ztree插件 -->
 <script type="text/javascript" src="js/jquery.ztree.all-3.5.min.js"></script>
+<!-- 引入ztree插件扩展功能 -->
 <script type="text/javascript" src="js/jquery.ztree.exhide-3.5.js"></script>
 </head>
 <body>
@@ -157,7 +162,8 @@ span.search_highlight {
 			var preNode; //前一节点
 			//为关键字加高亮在原始名称上添加了css样式,得到一个新名称newname
 			var newname;
-			
+			var metaChar = '[\\[\\]\\\\\^\\$\\.\\|\\?\\*\\+\\(\\)]'; //js正则表达式元字符集
+			var rexMeta = new RegExp(metaChar, 'gi');//匹配元字符的正则表达式
 			
 			// 查找不符合条件的叶子节点
 			function filterFunc(node) {
@@ -178,17 +184,19 @@ span.search_highlight {
 				}
 				
 				if (node.name && node.name.toLowerCase().indexOf(_keywords)!=-1) {
-					//node.name名称中匹配关键字的起始位置startIndex
-					var startIndex = node.name.toLowerCase().indexOf(_keywords);
-					//node.name名称中匹配关键字的结束位置endIndex
-					var endIndex = startIndex + _keywords.length;
-					//从原文中摘取匹配部分toHighlight
-					//因为_keyword已经做过大小写处理,所以不能直接使用
-					var toHighlight = node.name.substring(startIndex,endIndex);
-					//创建正则表达式,进行全局替换,否则replace函数只替换第一次匹配
-					var rex = new RegExp(toHighlight, 'g');//'g'代表全局替换
+					var newKeywords = _keywords; //创建一个新变量,不对_keywords进行修改
+					var _keywordsMeta = newKeywords.match(rexMeta); //检查关键字中是否有元字符
+					if(_keywordsMeta){ //如果存在元字符
+						$.each(_keywordsMeta,function(i,o){ 
+							newKeywords = newKeywords.replace(o,"\\"+o); //对每个元字符进行转义处理
+						});
+					}
+					
 					//对原文中关键字加上高亮样式后得到一个新名称newname
 					node.oldname = node.name; //缓存原有名称用于恢复
+					//创建正则表达式,全局且不分大小写
+					var rex = new RegExp(newKeywords, 'gi');//'g'代表全局替换,'i'代表不区分大小写
+					var toHighlight = node.name.match(rex)[0]; //获取节点名称中匹配关键字的原始部分用于高亮
 					newname = node.name.replace(rex,"<span class='search_highlight'>"+toHighlight+"</span>");
 					node.name = newname; //将新名称赋给节点
 					//================================================//
