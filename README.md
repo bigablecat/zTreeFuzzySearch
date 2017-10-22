@@ -3,7 +3,7 @@
 1. 树形图隐藏所有不匹配的节点
 2. 节点名称中匹配部分高亮  
 
-效果图如下:
+效果图如下:  
 ![效果图](https://raw.githubusercontent.com/bigablecat/zTreeFuzzySearch/dev/demoimg/fuzzysearch.gif)
 
 完整代码和详细注释如下:
