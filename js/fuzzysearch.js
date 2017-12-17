@@ -48,6 +48,7 @@
 					var newKeywords = _keywords.replace(rexMeta,function(matchStr){
 						//对元字符做转义处理
 						return '\\' + matchStr;
+						
 					});
 					//为处理过元字符的_keywords创建正则表达式,全局且不分大小写
 					var rexGlobal = new RegExp(newKeywords, 'gi');//'g'代表全局匹配,'i'代表不区分大小写
