@@ -147,7 +147,7 @@ span.search_highlight {
 </html>
 ```
 
-a). js部分  
+b). js部分  
 
 ```html
 <!-- fuzzysearch.js -->
