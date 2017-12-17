@@ -46,7 +46,8 @@
 					//创建一个新变量newKeywords,不影响_keywords在下一个节点使用
 					//对_keywords中的元字符进行处理,否则无法在replace中使用RegExp
 					var newKeywords = _keywords.replace(rexMeta,function(matchStr){
-						return "\\" + matchStr; //对元字符做转义处理
+						//对元字符做转义处理
+						return '\\' + matchStr;
 					});
 					//为处理过元字符的_keywords创建正则表达式,全局且不分大小写
 					var rexGlobal = new RegExp(newKeywords, 'gi');//'g'代表全局匹配,'i'代表不区分大小写
