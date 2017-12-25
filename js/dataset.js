@@ -24,6 +24,18 @@ var mockData = [{
 	"pId": "0",
 	"id": "07"
 },{
+	"name": "测试大小写: 大写ABDEFGHINQRT,小写abdefghinqrt",
+	"pId": "0",
+	"id": "08"
+},{
+	"name": "测试大写ABDEFGHINQRT",
+	"pId": "0",
+	"id": "09"
+},{
+	"name": "测试小写abdefghinqrt",
+	"pId": "0",
+	"id": "10"
+},{
 	"name": "文学",
 	"pId": "0",
 	"id": "00"

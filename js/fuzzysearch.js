@@ -48,17 +48,18 @@
 						return '\\' + matchStr;
 						
 					});
+					node.oldname = node[nameKey]; //缓存原有名称用于恢复
 					//为处理过元字符的_keywords创建正则表达式,全局且不分大小写
 					var rexGlobal = new RegExp(newKeywords, 'gi');//'g'代表全局匹配,'i'代表不区分大小写
-					//获取节点名称中匹配关键字的原始部分用于高亮
-					var originalText = node[nameKey].match(rexGlobal)[0];
-					var highLightText = 
-						'<span style="color: whitesmoke;background-color: darkred;">'
-						+ originalText
-						+'</span>';
-					node.oldname = node[nameKey]; //缓存原有名称用于恢复
 					//无法直接使用replace(/substr/g,replacement)方法,所以使用RegExp
-					node[nameKey] = node.oldname.replace(rexGlobal, highLightText);//将关键字替换为高亮文本
+					node[nameKey] = node.oldname.replace(rexGlobal, function(originalText){
+						//将所有匹配的子串加上高亮效果
+						var highLightText =
+							'<span style="color: whitesmoke;background-color: darkred;">'
+							+ originalText
+							+'</span>';
+						return 	highLightText;					
+					});
 					//================================================//
 					//node.highlight用于高亮整个节点
 					//配合setHighlight方法和setting中view属性的fontCss
