@@ -149,8 +149,7 @@ span.search_highlight {
 
 b). js部分  
 
-```html
-<!-- fuzzysearch.js -->
+```javascript  
 /**
  * 
  * @param zTreeId ztree对象的id,不需要#
@@ -174,13 +173,11 @@ b). js部分
 	
 	// 过滤ztree显示数据
 	function ztreeFilter(zTreeObj,_keywords,callBackFunc) {
-		if(_keywords){
-			_keywords.toLowerCase(); //获取搜索关键字,直接处理为小写	
-		}else{
-			_keywords =''; //空字符串
+		if(!_keywords){
+			_keywords =''; //如果为空，赋值空字符串
 		}
 		
-		// 查找不符合条件的叶子节点
+		// 查找符合条件的叶子节点
 		function filterFunc(node) {
 			if(node && node.oldname && node.oldname.length>0){
 				node[nameKey] = node.oldname; //如果存在原始名称则恢复原始名称
@@ -188,7 +185,7 @@ b). js部分
 			//node.highlight = false; //取消高亮
 			zTreeObj.updateNode(node); //更新节点让之前对节点所做的修改生效
 			if (_keywords.length == 0) { 
-				//如果关键字为空,返回false,表示每个节点都显示
+				//如果关键字为空,返回true,表示每个节点都显示
 				zTreeObj.showNode(node);
 				zTreeObj.expandNode(node,isExpand); //关键字为空时是否展开节点
 				return true;
@@ -199,19 +196,22 @@ b). js部分
 					//创建一个新变量newKeywords,不影响_keywords在下一个节点使用
 					//对_keywords中的元字符进行处理,否则无法在replace中使用RegExp
 					var newKeywords = _keywords.replace(rexMeta,function(matchStr){
-						return "\\" + matchStr; //对元字符做转义处理
+						//对元字符做转义处理
+						return '\\' + matchStr;
+						
 					});
+					node.oldname = node[nameKey]; //缓存原有名称用于恢复
 					//为处理过元字符的_keywords创建正则表达式,全局且不分大小写
 					var rexGlobal = new RegExp(newKeywords, 'gi');//'g'代表全局匹配,'i'代表不区分大小写
-					//获取节点名称中匹配关键字的原始部分用于高亮
-					var originalText = node[nameKey].match(rexGlobal)[0];
-					var highLightText = 
-						'<span style="color: whitesmoke;background-color: darkred;">'
-						+ originalText
-						+'</span>';
-					node.oldname = node[nameKey]; //缓存原有名称用于恢复
 					//无法直接使用replace(/substr/g,replacement)方法,所以使用RegExp
-					node[nameKey] = node.oldname.replace(rexGlobal, highLightText);//将关键字替换为高亮文本
+					node[nameKey] = node.oldname.replace(rexGlobal, function(originalText){
+						//将所有匹配的子串加上高亮效果
+						var highLightText =
+							'<span style="color: whitesmoke;background-color: darkred;">'
+							+ originalText
+							+'</span>';
+						return 	highLightText;					
+					});
 					//================================================//
 					//node.highlight用于高亮整个节点
 					//配合setHighlight方法和setting中view属性的fontCss
@@ -225,10 +225,10 @@ b). js部分
 			}
 			
 			zTreeObj.hideNode(node); // 隐藏不符合要求的节点
-			return false;
+			return false; //不符合返回false
 		}
 		var nodesShow = zTreeObj.getNodesByFilter(filterFunc); //获取匹配关键字的节点
-		processShowNodes(nodesShow,_keywords);//对获取的节点进行处理
+		processShowNodes(nodesShow, _keywords);//对获取的节点进行二次处理
 	}
 	
 	/**
@@ -238,17 +238,17 @@ b). js部分
 		if(nodesShow && nodesShow.length>0){
 			//关键字不为空时对关键字节点的祖先节点进行二次处理
 			if(_keywords.length>0){ 
-				$.each(nodesShow,function(n,obj){
-					var pathOfOne = obj.getPath();//向上追溯,获取节点的所有父节点(包括自己)
+				$.each(nodesShow, function(n,obj){
+					var pathOfOne = obj.getPath();//向上追溯,获取节点的所有祖先节点(包括自己)
 					if(pathOfOne && pathOfOne.length>0){ //对path中的每个节点进行操作
-						//i<pathOfOne.length-1,对节点自己不再操作
+						// i < pathOfOne.length-1, 对节点本身不再操作
 						for(var i=0;i<pathOfOne.length-1;i++){
 							zTreeObj.showNode(pathOfOne[i]); //显示节点
 							zTreeObj.expandNode(pathOfOne[i],true); //展开节点
 						}
 					}
 				});				
-			}else{ //显示所有节点时展开根节点
+			}else{ //关键字为空则显示所有节点, 此时展开根节点
 				var rootNodes = zTreeObj.getNodesByParam('level','0');//获得所有根节点
 				$.each(rootNodes,function(n,obj){
 					zTreeObj.expandNode(obj,true); //展开所有根节点
@@ -277,6 +277,141 @@ b). js部分
 }
 ```
 
+c). 模拟数据部分  
+
+```json  
+/*dataset.js*/
+var mockData = [{
+	"name": "图书",
+	"pId": "",
+	"id": "0"
+}, {
+	"name": "其他1",
+	"pId": "",
+	"id": "1"
+},{
+	"name": "其他2",
+	"pId": "",
+	"id": "2"
+},{
+	"name": "其他3",
+	"pId": "",
+	"id": "3"
+},
+{
+	"name": "测试js正则元字符:[]\\^$.|?*+()",
+	"pId": "0",
+	"id": "06"
+},{
+	"name": "测试其他字符:{}<>'\"~`!@#%&-;:/,",
+	"pId": "0",
+	"id": "07"
+},{
+	"name": "测试大小写同节点: 大写ABDEFGHINQRT,小写abdefghinqrt",
+	"pId": "0",
+	"id": "08"
+},{
+	"name": "测试大写ABDEFGHINQRT",
+	"pId": "0",
+	"id": "09"
+},{
+	"name": "测试小写abdefghinqrt",
+	"pId": "0",
+	"id": "10"
+},{
+	"name": "文学",
+	"pId": "0",
+	"id": "00"
+}, {
+	"name": "历史",
+	"pId": "0",
+	"id": "01"
+}, {
+	"name": "法律",
+	"pId": "0",
+	"id": "02"
+}, {
+	"name": "辞典与工具书",
+	"pId": "0",
+	"id": "03"
+}, {
+	"name": "科学与自然",
+	"pId": "0",
+	"id": "04"
+},{
+	"name": "自然科学总论",
+	"pId": "04",
+	"id": "040"
+},{
+	"name": "数学",
+	"pId": "04",
+	"id": "041"
+},{
+	"name": "物理",
+	"pId": "04",
+	"id": "042"
+},{
+	"name": "天文学 地球科学",
+	"pId": "04",
+	"id": "043"
+}, {
+	"name": "计算机与互联网",
+	"pId": "0",
+	"id": "05"
+}, {
+	"name": "编程与开发",
+	"pId": "05",
+	"id": "050"
+}, {
+	"name": "编程语言与工具",
+	"pId": "050",
+	"id": "0500"
+}, {
+	"name": "C & C++",
+	"pId": "0500",
+	"id": "05000"
+},{
+	"name": "JAVA",
+	"pId": "0500",
+	"id": "05001"
+},{
+	"name": "Python",
+	"pId": "0500",
+	"id": "05002"
+},{
+	"name": "Python编程 从入门到实践",
+	"pId": "05002",
+	"id": "050020"
+},{
+	"name": "Python编程快速上手 让繁琐工作自动化",
+	"pId": "05002",
+	"id": "050021"
+}, {
+	"name": "算法与数据结构",
+	"pId": "050",
+	"id": "0501"
+}, {
+	"name": "编译原理和编译器",
+	"pId": "050",
+	"id": "0502"
+}, {
+	"name": "操作系统",
+	"pId": "05",
+	"id": "051"
+}, {
+	"name": "数据库",
+	"pId": "05",
+	"id": "052"
+}, {
+	"name": "计算机科学理论",
+	"pId": "05",
+	"id": "053"
+}, {
+	"name": "云计算与大数据",
+	"pId": "05",
+	"id": "054"
+}]
+```  
 ### 4.参考文章:
 
 a). [ztree根据关键字模糊搜索](http://blog.csdn.net/danielpei1222/article/details/52078013)

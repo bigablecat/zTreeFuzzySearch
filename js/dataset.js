@@ -1,3 +1,4 @@
+/*dataset.js*/
 var mockData = [{
 	"name": "图书",
 	"pId": "",
@@ -24,7 +25,7 @@ var mockData = [{
 	"pId": "0",
 	"id": "07"
 },{
-	"name": "测试大小写: 大写ABDEFGHINQRT,小写abdefghinqrt",
+	"name": "测试大小写同节点: 大写ABDEFGHINQRT,小写abdefghinqrt",
 	"pId": "0",
 	"id": "08"
 },{
