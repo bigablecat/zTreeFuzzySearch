@@ -21,13 +21,11 @@
 	
 	// 过滤ztree显示数据
 	function ztreeFilter(zTreeObj,_keywords,callBackFunc) {
-		if(_keywords){
-			_keywords.toLowerCase(); //获取搜索关键字,直接处理为小写	
-		}else{
-			_keywords =''; //空字符串
+		if(!_keywords){
+			_keywords =''; //如果为空，赋值空字符串
 		}
 		
-		// 查找不符合条件的叶子节点
+		// 查找符合条件的叶子节点
 		function filterFunc(node) {
 			if(node && node.oldname && node.oldname.length>0){
 				node[nameKey] = node.oldname; //如果存在原始名称则恢复原始名称
@@ -35,7 +33,7 @@
 			//node.highlight = false; //取消高亮
 			zTreeObj.updateNode(node); //更新节点让之前对节点所做的修改生效
 			if (_keywords.length == 0) { 
-				//如果关键字为空,返回false,表示每个节点都显示
+				//如果关键字为空,返回true,表示每个节点都显示
 				zTreeObj.showNode(node);
 				zTreeObj.expandNode(node,isExpand); //关键字为空时是否展开节点
 				return true;
@@ -74,10 +72,10 @@
 			}
 			
 			zTreeObj.hideNode(node); // 隐藏不符合要求的节点
-			return false;
+			return false; //不符合返回false
 		}
 		var nodesShow = zTreeObj.getNodesByFilter(filterFunc); //获取匹配关键字的节点
-		processShowNodes(nodesShow,_keywords);//对获取的节点进行处理
+		processShowNodes(nodesShow, _keywords);//对获取的节点进行二次处理
 	}
 	
 	/**
@@ -87,17 +85,17 @@
 		if(nodesShow && nodesShow.length>0){
 			//关键字不为空时对关键字节点的祖先节点进行二次处理
 			if(_keywords.length>0){ 
-				$.each(nodesShow,function(n,obj){
-					var pathOfOne = obj.getPath();//向上追溯,获取节点的所有父节点(包括自己)
+				$.each(nodesShow, function(n,obj){
+					var pathOfOne = obj.getPath();//向上追溯,获取节点的所有祖先节点(包括自己)
 					if(pathOfOne && pathOfOne.length>0){ //对path中的每个节点进行操作
-						//i<pathOfOne.length-1,对节点自己不再操作
+						// i < pathOfOne.length-1, 对节点本身不再操作
 						for(var i=0;i<pathOfOne.length-1;i++){
 							zTreeObj.showNode(pathOfOne[i]); //显示节点
 							zTreeObj.expandNode(pathOfOne[i],true); //展开节点
 						}
 					}
 				});				
-			}else{ //显示所有节点时展开根节点
+			}else{ //关键字为空则显示所有节点, 此时展开根节点
 				var rootNodes = zTreeObj.getNodesByParam('level','0');//获得所有根节点
 				$.each(rootNodes,function(n,obj){
 					zTreeObj.expandNode(obj,true); //展开所有根节点
