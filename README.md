@@ -412,7 +412,7 @@ var mockData = [{
 	"id": "054"
 }]
 ```  
-### 4.参考文章:
+### 4.参考资料:  
 
 a). [ztree根据关键字模糊搜索](http://blog.csdn.net/danielpei1222/article/details/52078013)
 b). [我也来实现ztree模糊搜索功能](https://www.juwends.com/tech/javascript-tech/ztree_fuzzy_search.html?utm_source=tuicool&utm_medium=referral)
