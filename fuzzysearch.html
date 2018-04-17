@@ -48,19 +48,12 @@ span.search_highlight {
 	<div><small>*参照亚马逊中文网图书板块的结构创建了模拟数据</small></div>
 	<script type="text/javascript">
 			
-	//此高亮用于整个节点
-	/* function setHighlight(treeId, treeNode) {
-		return (treeNode.highlight) ? {"font-weight":"bold", "background-color": "#ddd"} : {"font-weight":"normal", "background-color": "transparent"};
-	} */
-	
 	//ztree配置
 	var setting = {
 			check: {
 				enable: true//checkbox
 			},
 			view: {
-				// 使用ztree自定义高亮时，一定要设置fontCss,setHighlight是自定义高亮方法
-				//fontCss: setHighlight,
 				nameIsHTML: true, //允许name支持html				
 				selectedMulti: false
 			},

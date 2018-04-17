@@ -60,12 +60,6 @@
 							+'</span>';
 						return 	highLightText;					
 					});
-					//================================================//
-					//node.highlight用于高亮整个节点
-					//配合setHighlight方法和setting中view属性的fontCss
-					//因为有了关键字高亮处理,所以不再进行相关设置
-					//node.highlight = true; 
-					//================================================//
 					zTreeObj.updateNode(node); //update让更名和高亮生效
 				}
 				zTreeObj.showNode(node);//显示符合条件的节点
@@ -88,7 +82,7 @@
 			if(_keywords.length>0){ 
 				$.each(nodesShow, function(n,obj){
 					var pathOfOne = obj.getPath();//向上追溯,获取节点的所有祖先节点(包括自己)
-					if(pathOfOne && pathOfOne.length>0){ //对path中的每个节点进行操作
+					if(pathOfOne && pathOfOne.length>0){
 						// i < pathOfOne.length-1, 对节点本身不再操作
 						for(var i=0;i<pathOfOne.length-1;i++){
 							zTreeObj.showNode(pathOfOne[i]); //显示节点
