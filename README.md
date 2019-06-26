@@ -1,7 +1,8 @@
-### 0. 项目概述:  
+### 项目概述:  
 
->为前端插件 [zTree](https://github.com/zTree/zTree_v3) 添加的模糊搜索功能  
->此功能已被 zTree 收录，可查看官方 [demo演示](http://www.treejs.cn/v3/demo.php#_516) 
+>[zTree](https://github.com/zTree/zTree_v3) 是一个依靠 jQuery 实现的多功能 “树插件”
+>本项目为 **zTree** 添加模糊搜索功能  
+>模糊搜索功能已被 zTree 收录，可查看官方 [demo演示](http://www.treejs.cn/v3/demo.php#_516)  
 
 ### 1. 在搜索框中输入关键字,希望实现的效果:  
 
@@ -411,5 +412,5 @@ var mockData = [{
 ```  
 ### 4.参考资料:  
 
-a). [ztree根据关键字模糊搜索](http://blog.csdn.net/danielpei1222/article/details/52078013)
+a). [ztree根据关键字模糊搜索](http://blog.csdn.net/danielpei1222/article/details/52078013)  
 b). [我也来实现ztree模糊搜索功能](https://www.juwends.com/tech/javascript-tech/ztree_fuzzy_search.html?utm_source=tuicool&utm_medium=referral)
