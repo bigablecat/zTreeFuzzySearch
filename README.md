@@ -1,8 +1,8 @@
 ### 项目概述:  
 
->[zTree](https://github.com/zTree/zTree_v3) 是一个依靠 jQuery 实现的多功能 “树插件”
+>[zTree](https://github.com/zTree/zTree_v3) 是一个依靠 jQuery 实现的多功能 “树插件”  
 >本项目为 **zTree** 添加模糊搜索功能  
->模糊搜索功能已被 zTree 收录，可查看官方 [demo演示](http://www.treejs.cn/v3/demo.php#_516)  
+>当前功能已被 zTree 收录，可查看官方 [demo演示](http://www.treejs.cn/v3/demo.php#_516)  
 
 ### 1. 在搜索框中输入关键字,希望实现的效果:  
 
