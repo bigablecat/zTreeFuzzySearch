@@ -95,6 +95,12 @@ span.search_highlight {
 	 */
 	function loadDataFromLocal(){
 		//此处的树节点数据mockData是在本地js/dataSet.js中预先定义的模拟数据
+		for(var i = 1001;i<5000;i++){
+			var newObj = {pId:""};
+			newObj.name="其他"+i;
+			newObj.id = i;
+			mockData.push(newObj);
+		}
 		initThisZtree(mockData);//传入数据,初始化ztree
 		// zTreeId ztree对象的id,不需要#
  		// searchField 输入框选择器

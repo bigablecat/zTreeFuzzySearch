@@ -1,10 +1,7 @@
----
-layout: post
-title: zTree实现树形图模糊搜索
-category: programming
----
-### 0. 项目地址:  
-[https://github.com/bigablecat/zTreeFuzzySearch](https://github.com/bigablecat/zTreeFuzzySearch)  
+### 0. 项目概述:  
+
+>为前端插件 [zTree](https://github.com/zTree/zTree_v3) 添加的模糊搜索功能  
+>此功能已被 zTree 收录，可查看官方 [demo演示](http://www.treejs.cn/v3/demo.php#_516) 
 
 ### 1. 在搜索框中输入关键字,希望实现的效果:  
 
@@ -13,7 +10,7 @@ a). 树形图隐藏所有不匹配的节点
 b). 节点名称中匹配部分高亮  
 
 ### 2. 慢速演示:
-![ztree_demo](https://raw.githubusercontent.com/bigable/imgs/master/ztree_demo.gif)  
+![ztree_demo](https://raw.githubusercontent.com/bigablecat/zTreeFuzzySearch/master/img/ztree_demo.gif)  
 
 ### 3. 完整代码和详细注释如下:  
 
